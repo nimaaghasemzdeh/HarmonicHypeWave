@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slow Unsupervised Dots Animation</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="400"></canvas>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+
+            // Define the number of dots
+            var numDots = 4000;
+            var dots = [];
+
+            for (var i = 0; i < numDots; i++) {
+                var x = Math.random() * canvas.width;
+                var y = Math.random() * canvas.height;
+                var vx = (Math.random() - 0.5) * 0.5;  // Adjusted for slower movement
+                var vy = (Math.random() - 0.5) * 0.5;  // Adjusted for slower movement
+                dots.push({ x: x, y: y, vx: vx, vy: vy });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                dots.forEach(function(dot) {
+                    // Update dot position with unsupervised movement
+                    dot.x += Math.sin(dot.y * 0.007) * 0.2;  // Adjusted for pattern and slowness
+                    dot.y += Math.cos(dot.x * 0.007) * 0.5;  // Adjusted for pattern and slowness
+
+                    if (dot.x < 0) dot.x = canvas.width;
+                    if (dot.x > canvas.width) dot.x = 0;
+                    if (dot.y < 0) dot.y = canvas.height;
+                    if (dot.y > canvas.height) dot.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(dot.x, dot.y, 2, 0, 2 * Math.PI);
+                    ctx.fillStyle = "black";
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        });
+    </script>
+</body>
+</html>
